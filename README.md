@@ -141,6 +141,14 @@
         <groupId>hrpc</groupId>
         <artifactId>rpc-spring</artifactId>
     </dependency>
+    <dependency>
+        <groupId>hrpc</groupId>
+        <artifactId>rpc-registry</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>hrpc</groupId>
+        <artifactId>rpc-common</artifactId>
+    </dependency>
 
 
 > 结语：框架配置简单，只需要通过spring配置文件来曝露服务和引用服务就行，并且配置简单。
