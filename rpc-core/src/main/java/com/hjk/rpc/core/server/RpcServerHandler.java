@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.management.ServiceNotFoundException;
 
+import com.hjk.rpc.common.exception.RpcException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,30 +41,28 @@ public class RpcServerHandler  extends ChannelInboundHandlerAdapter {
             logger.info("server received client:[{}] data:{}",ctx.channel().remoteAddress(),o);
         }catch (Exception e){
             logger.error("format request object is fail",e);
-            response.setResultCode(RpcResponse.FAIL);
+            response.setExp(new RpcException(e));
             ctx.writeAndFlush(JSON.toJSONString(response)).addListener(ChannelFutureListener.CLOSE);
             return;
         }
         response.setRequestId(request.getRequestId());
         try {
-            Object serviceBean = rpcServiceMap.get(request.getServiceName());
+            Object serviceBean = rpcServiceMap.get(request.getInterfac());
             if(serviceBean == null){
-                throw new ServiceNotFoundException("service:"+request.getServiceName()+" not found!");
+                throw new ServiceNotFoundException("service:"+request.getInterfac()+" not found!");
             }
             Class<?> serviceClass = serviceBean.getClass();
             String methodName = request.getMethodName();
-            Class<?>[] parameterTypes = request.getParameterTypesClass();
+            Class<?>[] parameterTypes = transParTypes2Class(request.getParameterTypes());
             Object[] parameters = request.getParameters();
 
             FastClass serviceFastClass = FastClass.create(serviceClass);
             FastMethod serviceFastMethod = serviceFastClass.getMethod(methodName, parameterTypes);
             Object result = serviceFastMethod.invoke(serviceBean, parameters);
             response.setResult(result);
-            response.setResultCode(RpcResponse.SUCCESS);
         } catch (Throwable e) {
             logger.error("server invoke is error!",e);
-            response.setResultCode(RpcResponse.FAIL);
-            response.setErrorMsg(e.getMessage());
+            response.setExp(new RpcException(e));
         }
         String responseStr = JSON.toJSONString(response);
         logger.debug("server return data:{}",responseStr);
@@ -75,5 +74,13 @@ public class RpcServerHandler  extends ChannelInboundHandlerAdapter {
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         logger.error("RpcServerHandler caught exception", cause);
         ctx.close();
+    }
+
+    public Class<?>[] transParTypes2Class(String[] parameterTypes) throws ClassNotFoundException {
+        Class<?>[] clazzs = new Class<?>[parameterTypes.length];
+        for (int i=0;i<parameterTypes.length;i++){
+            clazzs[i] = Class.forName(parameterTypes[i]);
+        }
+        return clazzs;
     }
 }

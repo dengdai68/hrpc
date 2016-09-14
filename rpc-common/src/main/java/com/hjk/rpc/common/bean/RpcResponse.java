@@ -1,20 +1,25 @@
 package com.hjk.rpc.common.bean;
 
+import com.hjk.rpc.common.exception.RpcException;
+
 /**
  * 响应
  * Created by hanjk on 16/9/8.
  */
 public class RpcResponse {
 
-    public static final String SUCCESS="0000";
-    public static final String FAIL = "9999";
-
     private String requestId;
     private Object result;
-    private String resultCode;
-    private String errorMsg;
+    private RpcException exp;
+
+    public RpcResponse(String requestId, Object result, RpcException exp) {
+        this.requestId = requestId;
+        this.result = result;
+        this.exp = exp;
+    }
 
     public RpcResponse() {
+
     }
 
     public String getRequestId() {
@@ -33,12 +38,12 @@ public class RpcResponse {
         this.result = result;
     }
 
-    public String getResultCode() {
-        return resultCode;
+    public RpcException getExp() {
+        return exp;
     }
 
-    public void setResultCode(String resultCode) {
-        this.resultCode = resultCode;
+    public void setExp(RpcException exp) {
+        this.exp = exp;
     }
 
     @Override
@@ -46,22 +51,7 @@ public class RpcResponse {
         return "RpcResponse{" +
                 "requestId='" + requestId + '\'' +
                 ", result=" + result +
-                ", resultCode='" + resultCode + '\'' +
+                ", exp=" + exp +
                 '}';
-    }
-
-    public RpcResponse(String requestId, Object result, String resultCode, String errorMsg) {
-        this.requestId = requestId;
-        this.result = result;
-        this.resultCode = resultCode;
-        this.errorMsg = errorMsg;
-    }
-
-    public String getErrorMsg() {
-        return errorMsg;
-    }
-
-    public void setErrorMsg(String errorMsg) {
-        this.errorMsg = errorMsg;
     }
 }

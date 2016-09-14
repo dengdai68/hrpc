@@ -9,6 +9,7 @@ import com.alibaba.fastjson.JSON;
 import com.hjk.rpc.common.Constant;
 import com.hjk.rpc.common.bean.RpcRequest;
 import com.hjk.rpc.common.bean.RpcResponse;
+import com.hjk.rpc.common.exception.RpcException;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -63,10 +64,9 @@ public class RpcClient extends RpcClientHandler {
             channel.closeFuture().sync();
             // 返回 RPC 响应对象
             if(response == null){
-                response = new RpcResponse();
-                response.setRequestId(request.getRequestId());
-                response.setResultCode(RpcResponse.FAIL);
-                response.setErrorMsg("请求异常!");
+                throw new RpcException("requestId:"+request.getRequestId()+" 远程调用错误!");
+            }else if(response.getExp() != null){
+                throw response.getExp();
             }
             return response;
         } finally {

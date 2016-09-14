@@ -11,10 +11,22 @@ import java.util.Arrays;
 public class RpcRequest {
 
     private String requestId;
-    private String serviceName;
+    private String interfac;
     private String methodName;
     private String[] parameterTypes;
     private Object[] parameters;
+
+    public RpcRequest() {
+    }
+
+    public RpcRequest(String requestId, String interfac, String methodName,
+                      String[] parameterTypes, Object[] parameters) {
+        this.requestId = requestId;
+        this.interfac = interfac;
+        this.methodName = methodName;
+        this.parameterTypes = parameterTypes;
+        this.parameters = parameters;
+    }
 
     public String getRequestId() {
         return requestId;
@@ -24,12 +36,12 @@ public class RpcRequest {
         this.requestId = requestId;
     }
 
-    public String getServiceName() {
-        return serviceName;
+    public String getInterfac() {
+        return interfac;
     }
 
-    public void setServiceName(String serviceName) {
-        this.serviceName = serviceName;
+    public void setInterfac(String interfac) {
+        this.interfac = interfac;
     }
 
     public String getMethodName() {
@@ -40,6 +52,14 @@ public class RpcRequest {
         this.methodName = methodName;
     }
 
+    public String[] getParameterTypes() {
+        return parameterTypes;
+    }
+
+    public void setParameterTypes(String[] parameterTypes) {
+        this.parameterTypes = parameterTypes;
+    }
+
     public Object[] getParameters() {
         return parameters;
     }
@@ -48,39 +68,14 @@ public class RpcRequest {
         this.parameters = parameters;
     }
 
-
-    public String[] getParameterTypes() {
-        return parameterTypes;
-    }
-
     @Override
     public String toString() {
         return "RpcRequest{" +
                 "requestId='" + requestId + '\'' +
-                ", serviceName='" + serviceName + '\'' +
+                ", interfac='" + interfac + '\'' +
                 ", methodName='" + methodName + '\'' +
                 ", parameterTypes=" + Arrays.toString(parameterTypes) +
                 ", parameters=" + Arrays.toString(parameters) +
                 '}';
-    }
-
-    @JSONField(serialize = false)
-    public Class<?>[] getParameterTypesClass() throws ClassNotFoundException {
-        Class<?>[] clazzs = new Class<?>[parameterTypes.length];
-        for (int i=0;i<parameterTypes.length;i++){
-            clazzs[i] = Class.forName(parameterTypes[i]);
-        }
-        return clazzs;
-    }
-
-    public void setParameterTypes(String[] parameterTypes) {
-        this.parameterTypes = parameterTypes;
-    }
-    public void setParameterTypesClass(Class<?>[] parameterTypes) {
-        String[] classs = new String[parameterTypes.length];
-        for (int i=0;i<parameterTypes.length;i++){
-            classs[i] = parameterTypes[i].getName();
-        }
-        this.parameterTypes =  classs;
     }
 }

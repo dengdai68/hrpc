@@ -1,6 +1,7 @@
 package com.hjk.rpc.core.client;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +10,6 @@ import com.hjk.rpc.common.bean.RpcRequest;
 import com.hjk.rpc.common.bean.RpcResponse;
 import com.hjk.rpc.common.bean.ServiceObject;
 import com.hjk.rpc.common.exception.NotFoundServiceException;
-import com.hjk.rpc.common.exception.RpcException;
 import com.hjk.rpc.common.utils.StringUtil;
 import com.hjk.rpc.common.utils.UUIDUtil;
 import com.hjk.rpc.registry.discovery.ServiceDiscovery;
@@ -36,13 +36,14 @@ public class RpcCglibProxy{
                 if(method.getDeclaringClass() == Object.class){
                     return method.invoke(this, objects);
                 }else{
+                    Parameter[] parameters = method.getParameters();
                     //封装 request
-                    RpcRequest request = new RpcRequest();
-                    request.setServiceName(method.getDeclaringClass().getName());
-                    request.setMethodName(method.getName());
-                    request.setRequestId(UUIDUtil.getUUID());
-                    request.setParameterTypesClass(method.getParameterTypes());
-                    request.setParameters(objects);
+                    RpcRequest request = new RpcRequest(UUIDUtil.getUUID(),
+                            method.getDeclaringClass().getName(),
+                            method.getName(),
+                            transParTypes2Str(method.getParameterTypes()),
+                            objects
+                            );
                     //发送请求
                     ServiceDiscovery serviceDiscovery = ZookeeperServiceDiscovery.getInstance();
                     String serverAddress ;
@@ -63,11 +64,16 @@ public class RpcCglibProxy{
                     long endTime = System.currentTimeMillis();
                     logger.info("client received return data:{}",response);
                     logger.info("client request cost time:{}",endTime - beginTime);
-                    if(!RpcResponse.SUCCESS.equals(response.getResultCode())){
-                        throw new RpcException("远程调用异常！" + response.getErrorMsg());
-                    }
                     return response.getResult();
                 }
+            }
+
+            public String[] transParTypes2Str(Class<?>[] parameterTypes) {
+                String[] classs = new String[parameterTypes.length];
+                for (int i=0;i<parameterTypes.length;i++){
+                    classs[i] = parameterTypes[i].getName();
+                }
+                return classs;
             }
         });
         return enhancer.create();
