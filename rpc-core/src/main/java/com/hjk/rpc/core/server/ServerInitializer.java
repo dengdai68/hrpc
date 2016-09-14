@@ -5,6 +5,9 @@ import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.Set;
 
+import io.netty.channel.AdaptiveRecvByteBufAllocator;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import io.netty.handler.codec.LengthFieldPrepender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,6 +62,7 @@ public class ServerInitializer {
             });
             bootstrap.option(ChannelOption.SO_BACKLOG, 1024);
             bootstrap.childOption(ChannelOption.SO_KEEPALIVE, true);
+            bootstrap.option(ChannelOption.RCVBUF_ALLOCATOR, new AdaptiveRecvByteBufAllocator(64, 65536, 65536));
             // 启动 netty 服务器
             ChannelFuture future = bootstrap.bind(serverConf.getPort()).sync();
             logger.info("netty started on port {}", serverConf.getPort());

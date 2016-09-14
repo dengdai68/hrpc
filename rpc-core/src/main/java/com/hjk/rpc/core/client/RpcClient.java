@@ -2,6 +2,8 @@ package com.hjk.rpc.core.client;
 
 import java.nio.charset.Charset;
 
+import io.netty.channel.AdaptiveRecvByteBufAllocator;
+import io.netty.handler.codec.LengthFieldPrepender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +23,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 
@@ -55,6 +58,7 @@ public class RpcClient extends RpcClientHandler {
                     pipeline.addLast(RpcClient.this); // 处理 RPC 响应
                 }
             });
+            bootstrap.option(ChannelOption.RCVBUF_ALLOCATOR, new AdaptiveRecvByteBufAllocator(64, 65536, 65536));
             bootstrap.option(ChannelOption.TCP_NODELAY, true);
             // 连接 RPC 服务器
             ChannelFuture future = bootstrap.connect(host, port).sync();

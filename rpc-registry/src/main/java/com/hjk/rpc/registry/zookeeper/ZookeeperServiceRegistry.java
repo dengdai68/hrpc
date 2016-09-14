@@ -33,10 +33,14 @@ public class ZookeeperServiceRegistry implements ServiceRegistry {
         String servicePath = zkconf.getRegistryPath() +
                 "/" + service.getAppServer() +
                 "/" + service.getServiceName() ;
-        zkClient.createPersistent(servicePath,true);
+        if(!zkClient.exists(servicePath)){
+            zkClient.createPersistent(servicePath,true);
+        }
         //创建service address节点
         String addressPath = servicePath + "/" + service.getServiceAddress();
-        zkClient.createEphemeral(addressPath);
+        if(!zkClient.exists(addressPath)){
+            zkClient.createEphemeral(addressPath);
+        }
         logger.debug("create addressPath node:{}",addressPath);
     }
 }

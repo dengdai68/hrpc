@@ -1,5 +1,6 @@
 package com.hjk.rpc.core.server;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 import javax.management.ServiceNotFoundException;
@@ -62,7 +63,11 @@ public class RpcServerHandler  extends ChannelInboundHandlerAdapter {
             response.setResult(result);
         } catch (Throwable e) {
             logger.error("server invoke is error!",e);
-            response.setExp(new RpcException(e));
+            if(e instanceof InvocationTargetException){
+                response.setExp(new RpcException(((InvocationTargetException)e).getTargetException()));
+            }else{
+                response.setExp(new RpcException(e));
+            }
         }
         String responseStr = JSON.toJSONString(response);
         logger.debug("server return data:{}",responseStr);
