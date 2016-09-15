@@ -21,12 +21,12 @@
     <?xml version="1.0" encoding="UTF-8"?>
     <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:rpc="http://com.hjk.rpc/schema/rpc"
+       xmlns:rpc="http://rpc.hjk.com/schema/rpc"
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-       http://com.hjk.rpc/schema/rpc http://com.hjk.rpc/schema/rpc.xsd">
+       http://rpc.hjk.com/schema/rpc http://rpc.hjk.com/schema/rpc.xsd">
         <context:property-placeholder location="classpath:rpc.properties"/>
         <!-- 注册中心zookeeper的相关配置 -->
         <rpc:zookeeper address="${zookeeper.address}" sessionTimeout="${zookeeper.sessionTimeout}" connectionTimeout="${zookeeper.connectionTimeout}"/>
@@ -64,12 +64,12 @@
     <?xml version="1.0" encoding="UTF-8"?>
     <beans xmlns="http://www.springframework.org/schema/beans"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xmlns:rpc="http://com.hjk.rpc/schema/rpc"
+           xmlns:rpc="http://rpc.hjk.com/schema/rpc"
            xmlns:context="http://www.springframework.org/schema/context"
            xsi:schemaLocation="
            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-           http://com.hjk.rpc/schema/rpc http://com.hjk.rpc/schema/rpc.xsd">
+           http://rpc.hjk.com/schema/rpc http://rpc.hjk.com/schema/rpc.xsd">
         <!-- 注册中心zookeeper的相关配置 -->
         <context:property-placeholder location="classpath:rpc.properties"/>
         <!-- 通过spring注解来注册组件 看自己项目需要-->

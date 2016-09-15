@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema xmlns="http://com.hjk.rpc/schema/rpc"
+<xsd:schema xmlns="http://rpc.hjk.com/schema/rpc"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-            targetNamespace="http://com.hjk.rpc/schema/rpc"
+            targetNamespace="http://rpc.hjk.com/schema/rpc"
             elementFormDefault="qualified" attributeFormDefault="unqualified">
     <xsd:import namespace="http://www.springframework.org/schema/beans"/>
 
