@@ -25,6 +25,11 @@ public class Client1 {
         ApplicationContext ctx = new ClassPathXmlApplicationContext("spring-rpc.xml");
         Transport transport = (Transport) ctx.getBean("user");
         System.out.println(transport.getName());
-
+//        while (true){
+//            try {
+//                System.out.println(transport.getName());
+//            }catch (Exception e){}
+//
+//        }
     }
 }

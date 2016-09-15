@@ -1,11 +1,5 @@
 package com.hjk.rpc.core.client;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.hjk.rpc.common.bean.RpcRequest;
 import com.hjk.rpc.common.bean.RpcResponse;
 import com.hjk.rpc.common.bean.ServiceObject;
@@ -14,10 +8,13 @@ import com.hjk.rpc.common.utils.StringUtil;
 import com.hjk.rpc.common.utils.UUIDUtil;
 import com.hjk.rpc.registry.discovery.ServiceDiscovery;
 import com.hjk.rpc.registry.zookeeper.ZookeeperServiceDiscovery;
-
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.lang.reflect.Method;
 
 /**
  * 创建代理bean
@@ -36,7 +33,6 @@ public class RpcCglibProxy{
                 if(method.getDeclaringClass() == Object.class){
                     return method.invoke(this, objects);
                 }else{
-                    Parameter[] parameters = method.getParameters();
                     //封装 request
                     RpcRequest request = new RpcRequest(UUIDUtil.getUUID(),
                             method.getDeclaringClass().getName(),
