@@ -1,16 +1,5 @@
 package com.hjk.rpc.core.server;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.Map;
-import java.util.Set;
-
-import io.netty.channel.AdaptiveRecvByteBufAllocator;
-import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
-import io.netty.handler.codec.LengthFieldPrepender;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.hjk.rpc.common.Constant;
 import com.hjk.rpc.common.bean.ServiceObject;
 import com.hjk.rpc.common.conf.ServerConf;
@@ -18,8 +7,8 @@ import com.hjk.rpc.common.conf.ZookeeperConf;
 import com.hjk.rpc.common.utils.IpUtil;
 import com.hjk.rpc.registry.registry.ServiceRegistry;
 import com.hjk.rpc.registry.zookeeper.ZookeeperServiceRegistry;
-
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.AdaptiveRecvByteBufAllocator;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -30,6 +19,13 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * netty服务启动，注册zookeeper
@@ -69,7 +65,7 @@ public class ServerInitializer {
             serviceRegister(rpcServiceMap.keySet());
             logger.info("server to start successfully!!!");
             future.channel().closeFuture().sync();
-        } catch (Exception e) {
+        } catch (Throwable e) {
             logger.error("server to start failure!!!", e);
             throw e;
         } finally {
