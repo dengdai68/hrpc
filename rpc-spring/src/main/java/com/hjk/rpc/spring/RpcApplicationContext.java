@@ -62,7 +62,7 @@ public class RpcApplicationContext implements ApplicationContextAware,Initializi
         Map serverMap = RpcApplicationContext.getApplicationContext().getBeansOfType(ServerBean.class);
         if (serverMap != null && !serverMap.isEmpty()) {
             ((ServerBean) serverMap.values().toArray()[0]).injectionConf();
-            new ServerInitializer().init(rpcServiceMap);
+            new ServerInitializer(rpcServiceMap).init();
 
         }
     }
