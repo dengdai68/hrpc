@@ -8,8 +8,8 @@ import com.hjk.rpc.sample.api.Transport;
 public class Car implements Transport {
     @Override
     public String getName() {
-        throw new IllegalArgumentException("数据错误!");
-//        return "car";
+//        throw new IllegalArgumentException("数据错误!");
+        return "car";
     }
 
     @Override
