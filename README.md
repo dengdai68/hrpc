@@ -1,8 +1,8 @@
-#hrpc 一款spring+zookeeper+netty整合的rpc框架使用说明
+# hrpc 一款spring+zookeeper+netty整合的rpc框架使用说明
 
 
-##server配置
-###rpc接口定义
+## server配置
+### rpc接口定义
 ```java
     package com.rpc.sample.api;
     //此接口，暴露给客户端调用
@@ -10,7 +10,7 @@
         String sound();
     }
 ```
-###rpc接口实现
+### rpc接口实现
 ```java
     package com.rpc.sample.impl;
     import com.rpc.sample.Animal.api;
@@ -21,7 +21,7 @@
         }
     }
 ```
-###rpc服务暴露(spring-rpc.xml)
+### rpc服务暴露(spring-rpc.xml)
 ```xml
     <?xml version="1.0" encoding="UTF-8"?>
     <!-- 头部注意要加入rpc schema 描述  -->
@@ -46,7 +46,7 @@
         <bean class="com.rpc.sample.impl.Dog"/>
     </beans>
 ```
-###需要的配置文件(rpc.properties)
+### 需要的配置文件(rpc.properties)
 ```properties
     zookeeper.address=127.0.0.1:2181
     zookeeper.sessionTimeout=13000
@@ -54,7 +54,7 @@
 ```
 > 至此，服务方提供服务配置完成，其中spring配置<rpc:server/>,如果容器发现有次配置，就会启动服务器监听，如果没有此配置不会启动监听；name="testServer" 当分布式部署的时候，同一个项目name要相同，同时客户端也通过此名称来调用指定项目。
 
-###server服务启动
+### server服务启动
 ```java
     package com.rpc.sample.impl.com.rpc.sample;
 
@@ -69,8 +69,9 @@
 
 > 服务启动很简单，只要把spring容器启动，会自动注册服务和监听服务
 
-##client配置
-###spring引用服务(spring-rpc.xml)
+## client配置
+### spring引用服务(spring-rpc.xml)
+```xml
     <?xml version="1.0" encoding="UTF-8"?>
     <!-- 头部注意要加入rpc schema 描述  -->
     <beans xmlns="http://www.springframework.org/schema/beans"
@@ -92,11 +93,15 @@
             <rpc:interface id="animl" class="com.rpc.sample.Animal"/>
         </rpc:client>
     </beans>
-###需要的配置文件(rpc.properties)
+```
+### 需要的配置文件(rpc.properties)
+```properties
     zookeeper.address=127.0.0.1:2181
     zookeeper.sessionTimeout=13000
     zookeeper.connectionTimeout=5000
-###client 调用服务
+```
+### client 调用服务
+```java
     package com.rpc.sample.cilent;
 
     import com.rpc.sample.Animal;
@@ -133,16 +138,19 @@
             System.out.println("第三次:" + client.sound2());
         }
     }
+```
 
 执行结果
-
+```
     第一次:i sound !!!!!
     第二次:i sound !!!!!
     第三次:i sound !!!!!
+```
 
 > client客户端配置完成，配置简单，和spring完美结合
 
-##maven依赖(server,client)
+## maven依赖(server,client)
+```xml
     <!-- 不管是服务端还是客户端都需要依赖一下module-->
     <dependency>
         <groupId>hrpc</groupId>
@@ -160,7 +168,6 @@
         <groupId>hrpc</groupId>
         <artifactId>rpc-common</artifactId>
     </dependency>
-
-
+```
 > 结语：框架配置简单，只需要通过spring配置文件来曝露服务和引用服务就行，并且配置简单。
 
