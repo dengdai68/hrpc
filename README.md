@@ -3,12 +3,15 @@
 
 ##server配置
 ###rpc接口定义
+```java
     package com.rpc.sample.api;
     //此接口，暴露给客户端调用
     public interface Animal {
         String sound();
     }
+```
 ###rpc接口实现
+```java
     package com.rpc.sample.impl;
     import com.rpc.sample.Animal.api;
     public class Dog implements Animal{
@@ -17,7 +20,9 @@
             return "i sound !!!!!";
         }
     }
+```
 ###rpc服务暴露(spring-rpc.xml)
+```xml
     <?xml version="1.0" encoding="UTF-8"?>
     <!-- 头部注意要加入rpc schema 描述  -->
     <beans xmlns="http://www.springframework.org/schema/beans"
@@ -40,14 +45,17 @@
         <!-- 提供服务的实现类注册组件，也可以通过spring的注解方式注册组件 -->
         <bean class="com.rpc.sample.impl.Dog"/>
     </beans>
+```
 ###需要的配置文件(rpc.properties)
+```properties
     zookeeper.address=127.0.0.1:2181
     zookeeper.sessionTimeout=13000
     zookeeper.connectionTimeout=5000
-
+```
 > 至此，服务方提供服务配置完成，其中spring配置<rpc:server/>,如果容器发现有次配置，就会启动服务器监听，如果没有此配置不会启动监听；name="testServer" 当分布式部署的时候，同一个项目name要相同，同时客户端也通过此名称来调用指定项目。
 
 ###server服务启动
+```java
     package com.rpc.sample.impl.com.rpc.sample;
 
     import org.springframework.context.ApplicationContext;
@@ -57,6 +65,7 @@
             ApplicationContext ctx = new ClassPathXmlApplicationContext("spring-rpc.xml");
         }
     }
+```
 
 > 服务启动很简单，只要把spring容器启动，会自动注册服务和监听服务
 
